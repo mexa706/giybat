@@ -1,0 +1,21 @@
+### REGISTRATION
+POST localhost:8081/auth/registration
+Content-Type: application/json
+
+{
+  "name" : "Mexa" ,
+  "username" : "p.p.maga.zver@gmail.com" ,
+  "password" : "1221"
+}
+
+### VERIFICATION
+GET http://localhost:8081/auth/registration/verification/{profileId}
+
+### LOGIN
+POST localhost:8081/auth/login
+Content-Type: application/json
+
+{
+  "username" : "p.p.maga.zver@gmail.com" ,
+  "password" : "1221"
+}
