@@ -1,5 +1,6 @@
 package api.giybat.uz.service;
 
+import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.util.JwtUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -9,6 +10,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class EmailSendingService {
@@ -21,16 +24,19 @@ public class EmailSendingService {
 
     @Autowired
     private JavaMailSender javaMailSender;
+    @Autowired
+    private ResourceBundleService bundleService;
 
-    public void SendRegistrationEmail(String email, Integer profileId) {
+    public void SendRegistrationEmail(String email, Integer profileId, AppLanguage language) {
         String subject = "Complite Registration";
-        String body =  generateHtml().formatted(email,serverDomain, JwtUtil.encode(profileId));
-        System.out.println(JwtUtil.encode(profileId));
+
+        String body =  generateHtml().formatted(email,serverDomain, JwtUtil.encode(profileId),language.name());
+
         sendMimeEmail(email, subject,body);
     }
 
 
-    public String generateHtml() {
+    public String generateHtml( ) {
         return  "<!DOCTYPE html>\n" +
                 "<html lang=\"ru\">\n" +
                 "<head>\n" +
@@ -92,22 +98,13 @@ public class EmailSendingService {
                 "    <div class=\"container\">\n" +
                 "        <h2>Подтвердите вашу регистрацию</h2>\n" +
                 "        <p>Добро пожаловать! Остался всего один шаг. Нажмите на кнопку ниже, чтобы подтвердить ваш email: %s</p>\n" +
-                "        <a href=\"" + "%s/auth/registration/verification/%s" + "\" class=\"button\">Подтвердить email</a>\n" +
+                "        <a href=\"" + "%s/auth/registration/email-verification/%s?lang=%s" + "\" class=\"button\">Подтвердить email</a>\n" +
                 "        <p class=\"footer\">Если вы не регистрировались, просто проигнорируйте это сообщение.</p>\n" +
                 "    </div>\n" +
                 "</body>\n" +
                 "</html>";
     }
 
-
-    private void sendSimpleEmail(String email, String subject, String body) {
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setFrom(fromAccount);
-        msg.setTo(email);
-        msg.setSubject(subject);
-        msg.setText(body);
-        javaMailSender.send(msg);
-    }
 
     private void sendMimeEmail(String email, String subject, String body) {
 
@@ -119,16 +116,16 @@ public class EmailSendingService {
             helper.setTo(email);
             helper.setSubject(subject);
             helper.setText(body, true);
-            javaMailSender.send(msg);
+
+            CompletableFuture.runAsync(()->{
+                javaMailSender.send(msg);
+            });
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
 
 
-
-
     }
-
 
 }

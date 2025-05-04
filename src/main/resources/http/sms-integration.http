@@ -1,0 +1,32 @@
+
+### lOGIN SMS SEND
+POST https://notify.eskiz.uz/api/auth/login
+Content-Type: application/json
+
+{
+  "email" :"p.p.maga.zver@gmail.com",
+  "password" :"JAjkdi6n3JjyflGNsS3GDdDf8OiH2SDTjj7yfEcO"
+}
+
+
+###
+POST https://notify.eskiz.uz/api/message/sms/send
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDc0ODU3NTUsImlhdCI6MTc0NDg5Mzc1NSwicm9sZSI6InRlc3QiLCJzaWduIjoiYmQzOWE2YTEyNjNhNDU5YTIyNmM2NGQ3YTcwNDg4MDJhODEwMWZiYmU1ZjlmYmM5ZTc3ZDUwYmFhZDZlNDcwMiIsInN1YiI6IjEwNjMzIn0.W9my5_4FNJbQ3NIdGZvFpeMYx0Hf0pHGyI3bmvWG-Cw
+
+{
+"mobile_phone" :"998337706673",
+"message" :"Это тест от Eskiz",
+  "from" : "4546"
+}
+
+
+###
+POST https://core.telegram.org/gateway/api/checkSendAbility
+Content-Type: application/json
+Authorization: Bearer AAGWFgAAyVDAEororaDbTketuHUFLrJmI05nLwQjEmSa0A
+
+{
+  "phone_number" : "998337706673"
+}
+

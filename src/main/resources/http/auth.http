@@ -1,10 +1,11 @@
 ### REGISTRATION
 POST localhost:8081/auth/registration
 Content-Type: application/json
+Accept-Language: RU
 
 {
   "name" : "Mexa" ,
-  "username" : "p.p.maga.zver@gmail.com" ,
+  "username" : "+998337706673" ,
   "password" : "1221"
 }
 
@@ -14,8 +15,9 @@ GET http://localhost:8081/auth/registration/verification/{profileId}
 ### LOGIN
 POST localhost:8081/auth/login
 Content-Type: application/json
+Accept-Language: RU
 
 {
   "username" : "p.p.maga.zver@gmail.com" ,
-  "password" : "1221"
+  "password" : "12"
 }

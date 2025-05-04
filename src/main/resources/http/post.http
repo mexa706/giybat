@@ -1,0 +1,10 @@
+### POST
+POST localhost:8081/post/creat
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwLnAubWFnYS56dmVyQGdtYWlsLmNvbSIsInJvbGVzIjoiUk9MRV9VU0VSIiwiaWQiOiIxIiwiaWF0IjoxNzQzOTMwMTQxLCJleHAiOjE3NDM5MzM3NDF9.nAaqpj8U8D7ouyGNlNNAituG2amqjhSIfyxbJDcc349pl6YK7uK07xK6NRIEGAGbRiIsuXtN4FjVRWVkDyHNOA
+
+{
+  "name" : "Mexa" ,
+  "username" : "p.p.maga.zver@gmail.com" ,
+  "password" : "1221"
+}
