@@ -15,9 +15,26 @@ GET http://localhost:8081/auth/registration/verification/{profileId}
 ### LOGIN
 POST localhost:8081/auth/login
 Content-Type: application/json
-Accept-Language: RU
+Accept-Language: EN
 
 {
   "username" : "p.p.maga.zver@gmail.com" ,
   "password" : "12"
+}
+### Sms resend
+POST localhost:8081/auth/registration/sms-verification-resend
+Content-Type: application/json
+Accept-Language: EN
+
+{
+  "phone" : "998337706673"
+}
+### LOGIN sms
+POST localhost:8081/auth/registration/sms-verification
+Content-Type: application/json
+Accept-Language: RU
+
+{
+  "phone" : "+998337706673" ,
+  "code" : "68842"
 }

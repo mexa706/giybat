@@ -4,6 +4,7 @@ import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.util.JwtUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -24,8 +25,7 @@ public class EmailSendingService {
 
     @Autowired
     private JavaMailSender javaMailSender;
-    @Autowired
-    private ResourceBundleService bundleService;
+
 
     public void SendRegistrationEmail(String email, Integer profileId, AppLanguage language) {
         String subject = "Complite Registration";
@@ -35,6 +35,17 @@ public class EmailSendingService {
         sendMimeEmail(email, subject,body);
     }
 
+
+    public void SendResetPasswordEmail(String username, AppLanguage language)
+    {
+
+        String subject = "Reset password confirmation code";
+
+        String body =  "Whats up Soska. This is your reset password confirmation code : "+;
+
+        sendSimpleEmail(username, subject,body);
+        
+    }
 
     public String generateHtml( ) {
         return  "<!DOCTYPE html>\n" +
@@ -128,4 +139,13 @@ public class EmailSendingService {
 
     }
 
+
+    private void sendSimpleEmail(String email, String subject, String body) {
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setFrom(fromAccount);
+        msg.setTo(email);
+        msg.setSubject(subject);
+        msg.setText(body);
+        javaMailSender.send(msg);
+    }
 }

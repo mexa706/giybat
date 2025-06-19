@@ -18,7 +18,6 @@ class ApplicationTests {
 
     @Test
     void contextLoads() {
-        System.out.println(smsSendService.sendSms("+998337706673","Это тест от Eskiz","34342", SmsType.REGISTRATION));
     }
 
 }

@@ -2,9 +2,7 @@ package api.giybat.uz.service;
 
 import api.giybat.uz.dto.AppResponse;
 import api.giybat.uz.dto.ProfileDTO;
-import api.giybat.uz.dto.auth.AuthDTO;
-import api.giybat.uz.dto.auth.RegistrationDTO;
-import api.giybat.uz.dto.auth.SmsVerificationDTO;
+import api.giybat.uz.dto.auth.*;
 import api.giybat.uz.entity.ProfileEntity;
 import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.enums.GeneralStatus;
@@ -13,8 +11,11 @@ import api.giybat.uz.exps.AppBadExeptions;
 import api.giybat.uz.repository.ProfileRoleRepository;
 import api.giybat.uz.repository.ProfileRopsitory;
 
+import api.giybat.uz.util.EmailUtil;
 import api.giybat.uz.util.JwtUtil;
+import api.giybat.uz.util.PhoneUtil;
 import io.jsonwebtoken.JwtException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -76,9 +77,9 @@ public class AuthService {
 
         profileRoleService.save(ProfileRole.ROLE_USER, newProfile.getId());
 
-        if (dto.getUsername().contains("+998")) {
-            smsSendService.sendRegistrationSms(dto.getUsername());
-        } else {
+        if (PhoneUtil.isPhone(dto.getUsername())) {
+            smsSendService.sendRegistrationSms(dto.getUsername(),language);
+        } else if (EmailUtil.isEmail(dto.getUsername())) {
             emailSendingService.SendRegistrationEmail(dto.getUsername(), newProfile.getId(), language);
         }
         return new AppResponse<>(bundleService.getMessage("email.confirm.send", language));
@@ -135,6 +136,45 @@ public class AuthService {
         profileRopsitory.changeStatus(profileEntity.getId(), GeneralStatus.ACTIVE);
 
         return getLogInResponse(profileEntity);
+    }
+
+    public AppResponse<String> registrationSmsVerificationResend( SmsResendDTO dto, AppLanguage language) {
+        Optional<ProfileEntity> optional = profileRopsitory.findByUsernameAndVisibleTrue(dto.getPhone());
+        if (optional.isEmpty()) {
+            throw new AppBadExeptions(bundleService.getMessage("profile.not.found", language));
+        }
+
+        ProfileEntity profileEntity = optional.get();
+        if (!profileEntity.getStatus().equals(GeneralStatus.IN_REGISTRATION)) {
+            throw new AppBadExeptions(bundleService.getMessage("verification.failed", language));
+        }
+
+        smsSendService.sendRegistrationSms(dto.getPhone(),language);
+
+        return new AppResponse<>(bundleService.getMessage("sms.resent", language));
+    }
+
+    public AppResponse<String> resetPassword(ResetPasswordDTO dto, AppLanguage language) {
+
+        Optional<ProfileEntity> optional = profileRopsitory.findByUsernameAndVisibleTrue(dto.getUsername());
+        if (optional.isEmpty()) {
+            throw new AppBadExeptions(bundleService.getMessage("profile.not.found", language));
+        }
+        ProfileEntity profileEntity = optional.get();
+        if (!profileEntity.getStatus().equals(GeneralStatus.ACTIVE)) {
+            throw new AppBadExeptions(bundleService.getMessage("reset.failed", language));
+        }
+
+        if (PhoneUtil.isPhone(dto.getUsername())) {
+            smsSendService.sendResetPasswordSms(dto.getUsername(),language);
+        } else if (EmailUtil.isEmail(dto.getUsername())) {
+            emailSendingService.SendResetPasswordEmail(dto.getUsername(), language);
+        }
+
+
+
+
+        return new AppResponse<>(bundleService.getMessage("reset.password.response", language));
     }
 
     public ProfileDTO getLogInResponse(ProfileEntity profile) {

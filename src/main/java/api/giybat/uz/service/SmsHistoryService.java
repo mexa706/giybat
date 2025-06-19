@@ -25,6 +25,7 @@ public class SmsHistoryService {
         smsHistory.setPhone(phone);
         smsHistory.setMessage(message);
         smsHistory.setCode(code);
+        smsHistory.setAttemptCount(0);
         smsHistory.setSmsType(type);
         smsHistory.setCreatedDate(LocalDateTime.now());
 
@@ -39,13 +40,18 @@ public class SmsHistoryService {
 
     public void check(String phone, String code, AppLanguage language) {
 
-        Optional<SmsHistoryEntity> optional = smsHistoryRepository.findTop1ByPhoneAndOrderByCreatedDateDesc(phone);
+        Optional<SmsHistoryEntity> optional = smsHistoryRepository.findTop1ByPhoneOrderByCreatedDateDesc(phone);
         if (optional.isEmpty()) {
             throw new AppBadExeptions(bundleService.getMessage("verification.failed", language));
         }
-
         SmsHistoryEntity entity = optional.get();
+
+        if (entity.getAttemptCount()>=3){
+            throw new AppBadExeptions(bundleService.getMessage("code.limit.failed", language));
+        }
+
         if (!code.equals(entity.getCode())) {
+            smsHistoryRepository.updateAttemptCount(entity.getId());
             throw new AppBadExeptions(bundleService.getMessage("verification.code.invalid", language));
         }
 

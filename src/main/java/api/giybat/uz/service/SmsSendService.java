@@ -5,6 +5,7 @@ import api.giybat.uz.dto.sms.SmsAuthResponseDTO;
 import api.giybat.uz.dto.sms.SmsRequestDTO;
 import api.giybat.uz.dto.sms.SmsSendResponseDTO;
 import api.giybat.uz.entity.SmsProviderTokenHolder;
+import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.enums.SmsType;
 import api.giybat.uz.exps.AppBadExeptions;
 import api.giybat.uz.repository.SmsProviderTokenRepository;
@@ -12,6 +13,7 @@ import api.giybat.uz.util.RandomUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.constraints.NotBlank;
 import org.flywaydb.core.internal.util.ObjectMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,15 +41,16 @@ public class SmsSendService {
     private SmsProviderTokenRepository smsProviderTokenRepository;
     @Autowired
     private SmsHistoryService smsHistoryService;
-
-    public void sendRegistrationSms(String phone) {
+    @Autowired
+    private ResourceBundleService bundleService;
+    public void sendRegistrationSms(String phone, AppLanguage language) {
         String code = RandomUtil.getRandomSmsCode();
 
         /* String message = "%s";
         message = String.format(message, phone);*/
 
         System.out.println("Registaration code : "+code);
-        String testMessage ="Это тест от Eskiz";
+        String testMessage =bundleService.getMessage("registration.confirm.code", language);
 
         sendSms(phone, testMessage, code, SmsType.REGISTRATION);
     }
@@ -142,5 +145,19 @@ public class SmsSendService {
 
     }
 
+    public void sendResetPasswordSms(String username, AppLanguage language) {
+
+        String code = RandomUtil.getRandomSmsCode();
+
+        /* String message = "%s";
+        message = String.format(message, phone);*/
+
+        System.out.println("reset password code : "+code);
+        String testMessage =bundleService.getMessage("registration.confirm.code", language);
+
+        sendSms(username, testMessage, code, SmsType.RESET_PASSWORD);
+
+
+    }
 }
 

@@ -15,7 +15,7 @@ import java.util.UUID;
 public class SmsHistoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private String id;
 
     @Column(name="phone")
     private String phone;
@@ -32,4 +32,8 @@ public class SmsHistoryEntity {
     @Enumerated(EnumType.STRING)
     @Column(name="sms_type")
     private SmsType smsType;
+
+    @Column(name="attempt_count")
+    private Integer attemptCount=0;
+
 }
