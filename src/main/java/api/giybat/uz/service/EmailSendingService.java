@@ -1,10 +1,16 @@
 package api.giybat.uz.service;
 
+import api.giybat.uz.entity.EmailHistoryEntity;
 import api.giybat.uz.enums.AppLanguage;
+import api.giybat.uz.enums.EmailType;
+import api.giybat.uz.exps.AppBadExeptions;
+import api.giybat.uz.repository.EmailHistoryRepository;
 import api.giybat.uz.util.JwtUtil;
+import api.giybat.uz.util.RandomUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.validation.constraints.NotBlank;
+import jdk.jshell.execution.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -22,33 +28,57 @@ public class EmailSendingService {
     @Value("${server.domain}")
     private String serverDomain;
 
+    @Value("${spring.limit.attempt}")
+    private Integer attemptCount;
+
 
     @Autowired
     private JavaMailSender javaMailSender;
+
+    @Autowired
+    private EmailHistoryService emailHistoryService;
+
+    @Autowired
+    private ResourceBundleService bundleService;
 
 
     public void SendRegistrationEmail(String email, Integer profileId, AppLanguage language) {
         String subject = "Complite Registration";
 
-        String body =  generateHtml().formatted(email,serverDomain, JwtUtil.encode(profileId),language.name());
+        String body = generateHtml().formatted(email, serverDomain, JwtUtil.encode(profileId), language.name());
 
-        sendMimeEmail(email, subject,body);
+        sendMimeEmail(email, subject, body);
     }
 
 
-    public void SendResetPasswordEmail(String username, AppLanguage language)
-    {
+    public void SendResetPasswordEmail(String username, AppLanguage language) {
 
         String subject = "Reset password confirmation code";
+        String code = RandomUtil.getRandomSmsCode();
+        String body = "Whats up Soska. This is your reset password confirmation code : " + code;
 
-        String body =  "Whats up Soska. This is your reset password confirmation code : "+;
 
-        sendSimpleEmail(username, subject,body);
-        
+        sendAndCheckSimpleEmail(username, subject, body, language, code);
+
     }
 
-    public String generateHtml( ) {
-        return  "<!DOCTYPE html>\n" +
+    private void sendAndCheckSimpleEmail(String email, String subject, String body, AppLanguage language,String code) {
+
+        Long countSms = emailHistoryService.getEmailCount(email);
+        if (countSms >= attemptCount) {
+            throw new AppBadExeptions(bundleService.getMessage("email.limit.reached", language));
+        }
+
+        CompletableFuture.runAsync(() -> {
+            sendSimpleEmail(email, subject, body);
+        });
+
+        emailHistoryService.create(email, body, code, EmailType.RESET_PASSWORD);
+    }
+
+
+    public String generateHtml() {
+        return "<!DOCTYPE html>\n" +
                 "<html lang=\"ru\">\n" +
                 "<head>\n" +
                 "    <meta charset=\"UTF-8\">\n" +
@@ -128,7 +158,7 @@ public class EmailSendingService {
             helper.setSubject(subject);
             helper.setText(body, true);
 
-            CompletableFuture.runAsync(()->{
+            CompletableFuture.runAsync(() -> {
                 javaMailSender.send(msg);
             });
 

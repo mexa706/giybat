@@ -1,10 +1,13 @@
 package api.giybat.uz.service;
 
+import api.giybat.uz.entity.EmailHistoryEntity;
 import api.giybat.uz.entity.SmsHistoryEntity;
 import api.giybat.uz.enums.AppLanguage;
+import api.giybat.uz.enums.EmailType;
 import api.giybat.uz.enums.SmsType;
 import api.giybat.uz.exps.AppBadExeptions;
-import api.giybat.uz.repository.SmsHistoryRepository;
+
+import api.giybat.uz.repository.EmailHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,49 +16,49 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class SmsHistoryService {
+public class EmailHistoryService {
     @Value("${spring.limit.time}")
     private Integer timeLimit;
     @Value("${spring.limit.attempt}")
     private Integer attemptCount;
     @Autowired
-    private SmsHistoryRepository smsHistoryRepository;
+    private EmailHistoryRepository emailHistoryRepository;
     @Autowired
     private ResourceBundleService bundleService;
 
-    public void create(String phone, String message, String code, SmsType type) {
+    public void create(String email, String message, String code, EmailType type) {
 
-        SmsHistoryEntity smsHistory = new SmsHistoryEntity();
-        smsHistory.setPhone(phone);
-        smsHistory.setMessage(message);
-        smsHistory.setCode(code);
-        smsHistory.setAttemptCount(0);
-        smsHistory.setSmsType(type);
-        smsHistory.setCreatedDate(LocalDateTime.now());
+        EmailHistoryEntity emailHistory = new EmailHistoryEntity();
+        emailHistory.setEmail(email);
+        emailHistory.setMessage(message);
+        emailHistory.setCode(code);
+        emailHistory.setAttemptCount(0);
+        emailHistory.setEmailType(type);
+        emailHistory.setCreatedDate(LocalDateTime.now());
 
 
-        smsHistoryRepository.save(smsHistory);
+        emailHistoryRepository.save(emailHistory);
     }
 
-    public Long getSmsCount(String phone) {
+    public Long getEmailCount(String email) {
         LocalDateTime now = LocalDateTime.now();
-        return smsHistoryRepository.countByPhoneAndCreatedDateBetween(phone, now.minusMinutes(2), now);
+        return emailHistoryRepository.countByEmailAndCreatedDateBetween(email, now.minusMinutes(2), now);
     }
 
-    public void check(String phone, String code, AppLanguage language) {
+    public void check(String email, String code, AppLanguage language) {
 
-        Optional<SmsHistoryEntity> optional = smsHistoryRepository.findTop1ByPhoneOrderByCreatedDateDesc(phone);
+        Optional<EmailHistoryEntity> optional = emailHistoryRepository.findTop1ByEmailOrderByCreatedDateDesc(email);
         if (optional.isEmpty()) {
             throw new AppBadExeptions(bundleService.getMessage("verification.failed", language));
         }
-        SmsHistoryEntity entity = optional.get();
+        EmailHistoryEntity entity = optional.get();
 
-        if (entity.getAttemptCount()>=attemptCount){
+        if (entity.getAttemptCount()>=attemptCount) {
             throw new AppBadExeptions(bundleService.getMessage("code.limit.failed", language));
         }
 
         if (!code.equals(entity.getCode())) {
-            smsHistoryRepository.updateAttemptCount(entity.getId());
+           emailHistoryRepository.updateAttemptCount(entity.getId());
             throw new AppBadExeptions(bundleService.getMessage("verification.code.invalid", language));
         }
 

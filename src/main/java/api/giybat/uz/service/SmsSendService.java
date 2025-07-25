@@ -37,6 +37,8 @@ public class SmsSendService {
     private String login;
     @Value("${eskiz.password}")
     private String password;
+    @Value("${spring.limit.attempt}")
+    private Integer attemptCount;
     @Autowired
     private SmsProviderTokenRepository smsProviderTokenRepository;
     @Autowired
@@ -52,20 +54,19 @@ public class SmsSendService {
         System.out.println("Registaration code : "+code);
         String testMessage =bundleService.getMessage("registration.confirm.code", language);
 
-        sendSms(phone, testMessage, code, SmsType.REGISTRATION);
+        sendSms(phone, testMessage, code, SmsType.REGISTRATION,language);
     }
 
-    private SmsSendResponseDTO sendSms(String phoneNumber, String message, String code, SmsType smsType) {
+    private SmsSendResponseDTO sendSms(String phoneNumber, String message, String code, SmsType smsType, AppLanguage language) {
 
         Long countSms = smsHistoryService.getSmsCount(phoneNumber);
-        if (countSms >= 3) {
-            throw new AppBadExeptions("Sms limit reached");
+        if (countSms >= attemptCount) {
+            throw new AppBadExeptions(bundleService.getMessage("sms.limit.reached", language));
         }
 
-
         SmsSendResponseDTO result = sendSms(phoneNumber, message);
-        smsHistoryService.create(phoneNumber, message, code, smsType);
 
+        smsHistoryService.create(phoneNumber, message, code, smsType);
 
         return result;
     }
@@ -155,7 +156,7 @@ public class SmsSendService {
         System.out.println("reset password code : "+code);
         String testMessage =bundleService.getMessage("registration.confirm.code", language);
 
-        sendSms(username, testMessage, code, SmsType.RESET_PASSWORD);
+        sendSms(username, testMessage, code, SmsType.RESET_PASSWORD,language);
 
 
     }

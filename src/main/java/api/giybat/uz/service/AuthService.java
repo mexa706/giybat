@@ -49,16 +49,13 @@ public class AuthService {
 
     public AppResponse<String> registaration(RegistrationDTO dto, AppLanguage language) {
 
-        //1.validation
-        //2.phone or email uje est
+
         Optional<ProfileEntity> optional = profileRopsitory.findByUsernameAndVisibleTrue(dto.getUsername());
         if (optional.isPresent()) {
             ProfileEntity profile = optional.get();
             if (profile.getStatus().equals(GeneralStatus.IN_REGISTRATION)) {
                 profileRoleService.deleteRole(profile.getId());
                 profileRopsitory.delete(profile);
-
-                // sen d sms/email
 
             } else {
                 throw new AppBadExeptions(bundleService.getMessage("email.phone.exists", language));
@@ -79,10 +76,12 @@ public class AuthService {
 
         if (PhoneUtil.isPhone(dto.getUsername())) {
             smsSendService.sendRegistrationSms(dto.getUsername(),language);
+            return new AppResponse<>(bundleService.getMessage("sms.confirm.send", language));
         } else if (EmailUtil.isEmail(dto.getUsername())) {
             emailSendingService.SendRegistrationEmail(dto.getUsername(), newProfile.getId(), language);
+            return new AppResponse<>(bundleService.getMessage("email.confirm.send", language));
         }
-        return new AppResponse<>(bundleService.getMessage("email.confirm.send", language));
+        return new AppResponse<>(bundleService.getMessage("contact.format.invalid", language));
     }
 
     public AppResponse<String> registrationEmailVerification(String token, AppLanguage language) {

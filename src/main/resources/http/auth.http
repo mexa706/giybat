@@ -5,7 +5,18 @@ Accept-Language: RU
 
 {
   "name" : "Mexa" ,
-  "username" : "+998337706673" ,
+  "username" : "p.p.maga.zver@gmail.com" ,
+  "password" : "1221"
+}
+
+### REGISTRATION
+POST localhost:8081/auth/registration
+Content-Type: application/json
+Accept-Language: RU
+
+{
+  "name" : "nexa" ,
+  "username" : "998906194380" ,
   "password" : "1221"
 }
 
@@ -37,4 +48,14 @@ Accept-Language: RU
 {
   "phone" : "+998337706673" ,
   "code" : "68842"
+}
+
+
+###  resent password
+POST localhost:8081/auth/reset-password
+Content-Type: application/json
+Accept-Language: EN
+
+{
+  "username" : "p.p.maga.zver@gmail.com"
 }
