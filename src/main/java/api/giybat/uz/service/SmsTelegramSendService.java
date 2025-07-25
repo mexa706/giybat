@@ -1,7 +1,5 @@
 package api.giybat.uz.service;
 
-import api.giybat.uz.Contract.SmsServiceVerificationContract;
-import api.giybat.uz.dto.AppResponse;
 import api.giybat.uz.dto.sms.TgSendDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -16,11 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
-public class SmsTelegramSendService implements SmsServiceVerificationContract {
+public class SmsTelegramSendService {
     @Autowired
     private RestTemplate restTemplate;
     @Value("${telegram.url}")
