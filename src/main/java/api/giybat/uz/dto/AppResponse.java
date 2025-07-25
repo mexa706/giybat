@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class AppResponse<T> {
-    private T data;
-
+    private T data22222;
 
 }
