@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 
 @Service
-public class SmsTelegramSendService {
+public class SmsTelegramSendService  {
     @Autowired
     private RestTemplate restTemplate;
     @Value("${telegram.url}")

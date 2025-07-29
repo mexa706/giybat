@@ -16,9 +16,21 @@ Accept-Language: RU
 
 {
   "name" : "nexa" ,
-  "username" : "998906194380" ,
+  "username" : "998337706673" ,
   "password" : "1221"
 }
+
+### sms verification
+POST localhost:8081/auth/registration/sms-verification
+Content-Type: application/json
+Accept-Language: RU
+
+{
+  "phone" : "998337706673" ,
+  "code" : "29871"
+}
+
+
 
 ### VERIFICATION
 GET http://localhost:8081/auth/registration/verification/{profileId}
@@ -57,5 +69,18 @@ Content-Type: application/json
 Accept-Language: EN
 
 {
-  "username" : "p.p.maga.zver@gmail.com"
+  "username" : "998337706673"
+}
+
+
+
+###  resent password confirm
+POST localhost:8081/auth/reset-password-confirm
+Content-Type: application/json
+Accept-Language: EN
+
+{
+  "username" : "998337706673",
+  "code" : "69848",
+  "password" : "69848"
 }

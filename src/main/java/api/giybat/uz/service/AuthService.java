@@ -17,12 +17,10 @@ import api.giybat.uz.util.PhoneUtil;
 import io.jsonwebtoken.JwtException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -45,6 +43,8 @@ public class AuthService {
     private SmsSendService smsSendService;
     @Autowired
     private SmsHistoryService smsHistoryService;
+    @Autowired
+    private EmailHistoryService emailHistoryService;
 
 
     public AppResponse<String> registaration(RegistrationDTO dto, AppLanguage language) {
@@ -75,7 +75,7 @@ public class AuthService {
         profileRoleService.save(ProfileRole.ROLE_USER, newProfile.getId());
 
         if (PhoneUtil.isPhone(dto.getUsername())) {
-            smsSendService.sendRegistrationSms(dto.getUsername(),language);
+            smsSendService.sendRegistrationSms(dto.getUsername(), language);
             return new AppResponse<>(bundleService.getMessage("sms.confirm.send", language));
         } else if (EmailUtil.isEmail(dto.getUsername())) {
             emailSendingService.SendRegistrationEmail(dto.getUsername(), newProfile.getId(), language);
@@ -137,7 +137,7 @@ public class AuthService {
         return getLogInResponse(profileEntity);
     }
 
-    public AppResponse<String> registrationSmsVerificationResend( SmsResendDTO dto, AppLanguage language) {
+    public AppResponse<String> registrationSmsVerificationResend(SmsResendDTO dto, AppLanguage language) {
         Optional<ProfileEntity> optional = profileRopsitory.findByUsernameAndVisibleTrue(dto.getPhone());
         if (optional.isEmpty()) {
             throw new AppBadExeptions(bundleService.getMessage("profile.not.found", language));
@@ -148,7 +148,7 @@ public class AuthService {
             throw new AppBadExeptions(bundleService.getMessage("verification.failed", language));
         }
 
-        smsSendService.sendRegistrationSms(dto.getPhone(),language);
+        smsSendService.sendRegistrationSms(dto.getPhone(), language);
 
         return new AppResponse<>(bundleService.getMessage("sms.resent", language));
     }
@@ -165,12 +165,10 @@ public class AuthService {
         }
 
         if (PhoneUtil.isPhone(dto.getUsername())) {
-            smsSendService.sendResetPasswordSms(dto.getUsername(),language);
+            smsSendService.sendResetPasswordSms(dto.getUsername(), language);
         } else if (EmailUtil.isEmail(dto.getUsername())) {
             emailSendingService.SendResetPasswordEmail(dto.getUsername(), language);
         }
-
-
 
 
         return new AppResponse<>(bundleService.getMessage("reset.password.response", language));
@@ -185,5 +183,27 @@ public class AuthService {
         response.setJwt(JwtUtil.encode(profile.getUsername(), profile.getId(), response.getRoleList()));
 
         return response;
+    }
+
+    public AppResponse<String> resetPasswordConfirm(@Valid ResetPasswordConfirmDTO dto, AppLanguage language) {
+
+        Optional<ProfileEntity> optional = profileRopsitory.findByUsernameAndVisibleTrue(dto.getUsername());
+        if (optional.isEmpty()) {
+            throw new AppBadExeptions(bundleService.getMessage("profile.not.found", language));
+        }
+        ProfileEntity profileEntity = optional.get();
+        if (!profileEntity.getStatus().equals(GeneralStatus.ACTIVE)) {
+            throw new AppBadExeptions(bundleService.getMessage("reset.failed", language));
+        }
+
+        if (PhoneUtil.isPhone(dto.getUsername())) {
+            smsHistoryService.check(dto.getUsername(), dto.getCode(), language);
+        } else if (EmailUtil.isEmail(dto.getUsername())) {
+            emailHistoryService.check(dto.getUsername(), dto.getCode(), language);
+        }
+
+        profileRopsitory.updatePassword(profileEntity.getId(),bCryptPasswordEncoder.encode(dto.getPassword()));
+
+        return new AppResponse<>(bundleService.getMessage("reset.password.confirm.success", language));
     }
 }

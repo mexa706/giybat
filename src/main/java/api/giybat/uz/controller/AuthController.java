@@ -50,4 +50,10 @@ public class AuthController {
                                                       @RequestHeader(value = "Accept-Language",defaultValue = "RU") AppLanguage language) {
         return ResponseEntity.ok().body(authService.resetPassword(dto, language));
     }
+
+    @PostMapping("/reset-password-confirm")
+    public ResponseEntity<AppResponse<String>> resetPassword(@Valid @RequestBody ResetPasswordConfirmDTO dto,
+                                                             @RequestHeader(value = "Accept-Language",defaultValue = "RU") AppLanguage language) {
+        return ResponseEntity.ok().body(authService.resetPasswordConfirm(dto, language));
+    }
 }
