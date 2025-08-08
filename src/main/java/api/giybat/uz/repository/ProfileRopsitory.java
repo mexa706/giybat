@@ -24,4 +24,15 @@ public interface ProfileRopsitory extends CrudRepository<ProfileEntity, Integer>
     @Transactional
     @Query("update ProfileEntity set password=?2 where id=?1")
     void updatePassword(Integer profileId, String password);
+
+    @Modifying
+    @Transactional
+    @Query("update ProfileEntity set name=?2 where id=?1")
+    void updateDetail(Integer profileId, String name);
+
+
+    @Query("SELECT u.password FROM ProfileEntity u WHERE u.id = :id")
+    String findPasswordById(Integer id);
+
+
 }

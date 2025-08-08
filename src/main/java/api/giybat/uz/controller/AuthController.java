@@ -2,7 +2,7 @@ package api.giybat.uz.controller;
 
 
 import api.giybat.uz.dto.AppResponse;
-import api.giybat.uz.dto.ProfileDTO;
+import api.giybat.uz.dto.profile.ProfileDTO;
 import api.giybat.uz.dto.auth.*;
 import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.service.AuthService;

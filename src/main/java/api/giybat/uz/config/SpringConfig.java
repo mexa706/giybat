@@ -50,8 +50,6 @@ public class SpringConfig   {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // authorization - Foydalanuvchining tizimdagi huquqlarini tekshirish.
-        // Ya'ni foydalanuvchi murojat qilayotgan API-larni ishlatishga ruxsati bor yoki yo'qligini tekshirishdir.
         http.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
             authorizationManagerRequestMatcherRegistry
                     .requestMatchers(AUTH_WHITELIST).permitAll()
@@ -59,7 +57,7 @@ public class SpringConfig   {
                     .authenticated();
         }).formLogin(Customizer.withDefaults())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        ;
+
         http.csrf(AbstractHttpConfigurer::disable); // csrf ochirilgan
         http.cors(httpSecurityCorsConfigurer -> { // cors yoqilgan
 

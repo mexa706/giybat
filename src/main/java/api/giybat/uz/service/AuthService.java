@@ -1,7 +1,7 @@
 package api.giybat.uz.service;
 
 import api.giybat.uz.dto.AppResponse;
-import api.giybat.uz.dto.ProfileDTO;
+import api.giybat.uz.dto.profile.ProfileDTO;
 import api.giybat.uz.dto.auth.*;
 import api.giybat.uz.entity.ProfileEntity;
 import api.giybat.uz.enums.AppLanguage;
@@ -170,8 +170,9 @@ public class AuthService {
             emailSendingService.SendResetPasswordEmail(dto.getUsername(), language);
         }
 
+        String response= String.format(bundleService.getMessage("reset.password.response", language), dto.getUsername());
 
-        return new AppResponse<>(bundleService.getMessage("reset.password.response", language));
+        return new AppResponse<>(response);
     }
 
     public ProfileDTO getLogInResponse(ProfileEntity profile) {

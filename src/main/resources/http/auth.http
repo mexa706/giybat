@@ -42,8 +42,9 @@ Accept-Language: EN
 
 {
   "username" : "p.p.maga.zver@gmail.com" ,
-  "password" : "12"
+  "password" : "123"
 }
+
 ### Sms resend
 POST localhost:8081/auth/registration/sms-verification-resend
 Content-Type: application/json
@@ -83,4 +84,26 @@ Accept-Language: EN
   "username" : "998337706673",
   "code" : "69848",
   "password" : "69848"
+}
+
+
+### profile update detail
+PUT http://localhost:8081/profile/detail
+Content-Type: application/json
+Accept-Language: EN
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwLnAubWFnYS56dmVyQGdtYWlsLmNvbSIsInJvbGVzIjoiUk9MRV9VU0VSIiwiaWQiOiIyIiwiaWF0IjoxNzUzOTczMzczLCJleHAiOjE3NTM5NzY5NzN9.iHuaQPgQ_tTLOHPGorLY-zn6C4_CgK1dSj7fhTrUipBE95wOpYJV18JvpaoQ2Fa3mLBdyOpxA-O9TD4kNFgapQ
+
+{
+  "name": "Dizzerrrrrooooooooooooooooooo"
+}
+
+### profile update password
+PUT http://localhost:8081/profile/updatePswd
+Content-Type: application/json
+Accept-Language: EN
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwLnAubWFnYS56dmVyQGdtYWlsLmNvbSIsInJvbGVzIjoiUk9MRV9VU0VSIiwiaWQiOiIyIiwiaWF0IjoxNzU0NDc4MzM1LCJleHAiOjE3NTQ0ODE5MzV9.yNGQsGYCXVdbfcSmw7ty34lROWp504fwvfXgrqcFcB3Gy2Gv1yoKfCuLVcVgUhHP_Lmf5Y487-3ejr95GFtN-Q
+
+{
+  "oldPassword": "11111",
+  "newPassword": "123"
 }
