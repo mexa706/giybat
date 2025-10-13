@@ -21,6 +21,8 @@ public class ProfileEntity {
     private String name;
     @Column(name="username")
     private String username;
+    @Column(name="temp_username")
+    private String tempUsername;
     @Column(name="password")
     private String password;
     @Column(name="status")

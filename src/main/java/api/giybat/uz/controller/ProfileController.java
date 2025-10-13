@@ -1,12 +1,12 @@
 package api.giybat.uz.controller;
 
 import api.giybat.uz.dto.AppResponse;
-import api.giybat.uz.dto.PostDTO;
+import api.giybat.uz.dto.ConfirmCodeDTO;
 import api.giybat.uz.dto.profile.ProfileDetailUpdateDTO;
 import api.giybat.uz.dto.profile.ProfilePswdUpdateDTO;
+import api.giybat.uz.dto.profile.ProfileUsernameUpdateDTO;
 import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.service.ProfileService;
-import api.giybat.uz.util.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,5 +31,19 @@ private ProfileService profileService;
                                                             @RequestHeader(value = "Accept-Language",defaultValue = "RU") AppLanguage language) {
 
         return ResponseEntity.ok().body(profileService.updatePswd(updatePswdDTO, language));
+    }
+
+    @PutMapping("/username")
+    public ResponseEntity<AppResponse<String>> updateUsername(@Valid @RequestBody ProfileUsernameUpdateDTO usernameDTO,
+                                                              @RequestHeader(value = "Accept-Language",defaultValue = "RU") AppLanguage language) {
+
+        return ResponseEntity.ok().body(profileService.updateUsername(usernameDTO, language));
+    }
+
+    @PutMapping("/username/confirm")
+    public ResponseEntity<AppResponse<String>> updateUsernameConfirm(@Valid @RequestBody ConfirmCodeDTO confirmDTO,
+                                                              @RequestHeader(value = "Accept-Language",defaultValue = "RU") AppLanguage language) {
+
+        return ResponseEntity.ok().body(profileService.updateUsernameConfirm(confirmDTO, language));
     }
 }

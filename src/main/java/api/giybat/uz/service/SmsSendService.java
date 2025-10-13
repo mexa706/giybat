@@ -56,6 +56,17 @@ public class SmsSendService {
 
         sendSms(phone, testMessage, code, SmsType.REGISTRATION,language);
     }
+    public void sendChangeUsernameSms(String phone, AppLanguage language) {
+        String code = RandomUtil.getRandomSmsCode();
+
+        /* String message = "%s";
+        message = String.format(message, phone);*/
+
+        System.out.println("Change Username code : "+code);
+        String testMessage =bundleService.getMessage("registration.confirm.code", language);
+
+        sendSms(phone, testMessage, code, SmsType.CHANGE_USERNAME_CONFIRM,language);
+    }
 
     private SmsSendResponseDTO sendSms(String phoneNumber, String message, String code, SmsType smsType, AppLanguage language) {
 

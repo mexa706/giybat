@@ -58,11 +58,21 @@ public class EmailSendingService {
         String body = "Whats up Soska. This is your reset password confirmation code : " + code;
 
 
-        sendAndCheckSimpleEmail(username, subject, body, language, code);
+        sendAndCheckSimpleEmail(username, subject, body, language, code, EmailType.RESET_PASSWORD);
+
+    }
+    public void SendChangeUsernameEmail(String username, AppLanguage language) {
+
+        String subject = "Change Username confirmation code";
+        String code = RandomUtil.getRandomSmsCode();
+        String body = "Whats up Soska. This is your change username confirmation code : " + code;
+
+
+        sendAndCheckSimpleEmail(username, subject, body, language, code, EmailType.CHANGE_USERNAME_CONFIRM);
 
     }
 
-    private void sendAndCheckSimpleEmail(String email, String subject, String body, AppLanguage language,String code) {
+    private void sendAndCheckSimpleEmail(String email, String subject, String body, AppLanguage language,String code, EmailType emailType  ) {
 
         Long countSms = emailHistoryService.getEmailCount(email);
         if (countSms >= attemptCount) {
@@ -73,7 +83,7 @@ public class EmailSendingService {
             sendSimpleEmail(email, subject, body);
         });
 
-        emailHistoryService.create(email, body, code, EmailType.RESET_PASSWORD);
+        emailHistoryService.create(email, body, code, emailType);
     }
 
 

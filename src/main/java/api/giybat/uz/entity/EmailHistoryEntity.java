@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "sms_history")
+@Table(name = "email_history")
 public class EmailHistoryEntity  {
 
     @Id

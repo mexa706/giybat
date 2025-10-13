@@ -6,7 +6,7 @@ Accept-Language: RU
 {
   "name" : "Mexa" ,
   "username" : "p.p.maga.zver@gmail.com" ,
-  "password" : "1221"
+  "password" : "123"
 }
 
 ### REGISTRATION
@@ -41,7 +41,7 @@ Content-Type: application/json
 Accept-Language: EN
 
 {
-  "username" : "p.p.maga.zver@gmail.com" ,
+  "username" : "p.p.maga.zver1@gmail.com" ,
   "password" : "123"
 }
 
@@ -101,9 +101,30 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwLnAubWFnYS56dmVyQGdtYWlsL
 PUT http://localhost:8081/profile/updatePswd
 Content-Type: application/json
 Accept-Language: EN
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwLnAubWFnYS56dmVyQGdtYWlsLmNvbSIsInJvbGVzIjoiUk9MRV9VU0VSIiwiaWQiOiIyIiwiaWF0IjoxNzU0NDc4MzM1LCJleHAiOjE3NTQ0ODE5MzV9.yNGQsGYCXVdbfcSmw7ty34lROWp504fwvfXgrqcFcB3Gy2Gv1yoKfCuLVcVgUhHP_Lmf5Y487-3ejr95GFtN-Q
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwLnAubWFnYS56dmVyMUBnbWFpbC5jb20iLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2MDM2Mzk0NywiZXhwIjoxNzYwMzY3NTQ3fQ.pAFLw39bJgEX7m9vQ-bo32HSfbYN50GD61vMBWqhTsrfWHM527DZmTVJfuhjp7XRr5xGWkbtd4YOlUuoEVqcuQ
 
 {
-  "oldPassword": "11111",
+  "oldPassword": "1221",
   "newPassword": "123"
+}
+
+
+### profile update username
+PUT http://localhost:8081/profile/username
+Content-Type: application/json
+Accept-Language: RU
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwLnAubWFnYS56dmVyMUBnbWFpbC5jb20iLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2MDM2NzUwNCwiZXhwIjoxNzYwMzcxMTA0fQ.npH0qFyc3aCW9e2ZGIKnfIlfaXyiWJ-1WCuDVLZ_AkXKcrcIcLwfK2z-KTUEglVW3xicDcA-JqugvuK-iStQyQ
+
+{
+  "username": "p.p.maga.zver@gmail.com"
+}
+
+### profile update username confirm
+PUT http://localhost:8081/profile/username/confirm
+Content-Type: application/json
+Accept-Language: RU
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwLnAubWFnYS56dmVyMUBnbWFpbC5jb20iLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2MDM2NzUwNCwiZXhwIjoxNzYwMzcxMTA0fQ.npH0qFyc3aCW9e2ZGIKnfIlfaXyiWJ-1WCuDVLZ_AkXKcrcIcLwfK2z-KTUEglVW3xicDcA-JqugvuK-iStQyQ
+
+{
+  "code": "70751"
 }
