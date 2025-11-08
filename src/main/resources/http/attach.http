@@ -1,0 +1,8 @@
+###Upload Attach
+POST localhost:8081/attach/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="pexels-veeterzy-39811.jpg";
+
+<D:\какуля\pexels-veeterzy-39811.jpg

@@ -1,20 +1,17 @@
 package api.giybat.uz.service;
 
 import api.giybat.uz.dto.sms.SmsAuthDTO;
-import api.giybat.uz.dto.sms.SmsAuthResponseDTO;
 import api.giybat.uz.dto.sms.SmsRequestDTO;
 import api.giybat.uz.dto.sms.SmsSendResponseDTO;
 import api.giybat.uz.entity.SmsProviderTokenHolder;
 import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.enums.SmsType;
-import api.giybat.uz.exps.AppBadExeptions;
+import api.giybat.uz.exps.AppBadExceptions;
 import api.giybat.uz.repository.SmsProviderTokenRepository;
 import api.giybat.uz.util.RandomUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.validation.constraints.NotBlank;
-import org.flywaydb.core.internal.util.ObjectMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -72,7 +69,7 @@ public class SmsSendService {
 
         Long countSms = smsHistoryService.getSmsCount(phoneNumber);
         if (countSms >= attemptCount) {
-            throw new AppBadExeptions(bundleService.getMessage("sms.limit.reached", language));
+            throw new AppBadExceptions(bundleService.getMessage("sms.limit.reached", language));
         }
 
         SmsSendResponseDTO result = sendSms(phoneNumber, message);

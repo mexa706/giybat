@@ -1,12 +1,11 @@
 package api.giybat.uz.controller;
 
 
-import api.giybat.uz.exps.AppBadExeptions;
+import api.giybat.uz.exps.AppBadExceptions;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -45,8 +44,8 @@ public class ExeptionHandlerController extends ResponseEntityExceptionHandler {
 
 
 
-    @ExceptionHandler(AppBadExeptions.class)
-    ResponseEntity<String> handle (AppBadExeptions e){
+    @ExceptionHandler(AppBadExceptions.class)
+    ResponseEntity<String> handle (AppBadExceptions e){
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 

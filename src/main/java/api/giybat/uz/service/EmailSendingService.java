@@ -1,16 +1,12 @@
 package api.giybat.uz.service;
 
-import api.giybat.uz.entity.EmailHistoryEntity;
 import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.enums.EmailType;
-import api.giybat.uz.exps.AppBadExeptions;
-import api.giybat.uz.repository.EmailHistoryRepository;
+import api.giybat.uz.exps.AppBadExceptions;
 import api.giybat.uz.util.JwtUtil;
 import api.giybat.uz.util.RandomUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.validation.constraints.NotBlank;
-import jdk.jshell.execution.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -76,7 +72,7 @@ public class EmailSendingService {
 
         Long countSms = emailHistoryService.getEmailCount(email);
         if (countSms >= attemptCount) {
-            throw new AppBadExeptions(bundleService.getMessage("email.limit.reached", language));
+            throw new AppBadExceptions(bundleService.getMessage("email.limit.reached", language));
         }
 
         CompletableFuture.runAsync(() -> {

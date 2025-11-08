@@ -33,6 +33,7 @@ public class SpringConfig   {
 
     public static final String[] AUTH_WHITELIST = {
             "/auth/**",
+            "/attach/upload",
     };
 
     @Bean

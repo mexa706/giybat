@@ -8,7 +8,7 @@ import api.giybat.uz.dto.profile.ProfileUsernameUpdateDTO;
 import api.giybat.uz.entity.ProfileEntity;
 import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.enums.ProfileRole;
-import api.giybat.uz.exps.AppBadExeptions;
+import api.giybat.uz.exps.AppBadExceptions;
 import api.giybat.uz.repository.ProfileRoleRepository;
 import api.giybat.uz.repository.ProfileRopsitory;
 import api.giybat.uz.util.EmailUtil;
@@ -43,7 +43,7 @@ public class ProfileService {
 
     public ProfileEntity getById(Integer id) {
 
-        return profileRopoitory.findByIdAndVisibleTrue(id).orElseThrow(() -> new AppBadExeptions("Profile not found"));
+        return profileRopoitory.findByIdAndVisibleTrue(id).orElseThrow(() -> new AppBadExceptions("Profile not found"));
 
     }
 
@@ -62,7 +62,7 @@ public class ProfileService {
         String encodedPassword = profileRopoitory.findPasswordById(profileId);
 
         if (!bCryptPasswordEncoder.matches(updatePswdDTO.getOldPassword(), encodedPassword)) {
-            throw  new AppBadExeptions(bundleService.getMessage("reset.failed", language));
+            throw  new AppBadExceptions(bundleService.getMessage("reset.failed", language));
         }
 
         String newEncodedPassword = bCryptPasswordEncoder.encode(updatePswdDTO.getNewPassword());
@@ -79,7 +79,7 @@ public class ProfileService {
         Optional<ProfileEntity> profile = profileRopoitory.findByUsernameAndVisibleTrue(usernameUpdateDTO.getUsername());
 
         if (profile.isPresent()) {
-            throw  new AppBadExeptions(bundleService.getMessage("email.phone.exists", language));
+            throw  new AppBadExceptions(bundleService.getMessage("email.phone.exists", language));
         }
 
         //save
@@ -99,7 +99,7 @@ public class ProfileService {
             String message = bundleService.getMessage("confirm.code.send", language).formatted(usernameUpdateDTO.getUsername());
             return new AppResponse<>(message);
         } else {
-            throw  new AppBadExeptions(bundleService.getMessage("contact.format.invalid", language));
+            throw  new AppBadExceptions(bundleService.getMessage("contact.format.invalid", language));
         }
 
     }
