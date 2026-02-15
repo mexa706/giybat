@@ -3,6 +3,7 @@ package api.giybat.uz.controller;
 import api.giybat.uz.dto.AppResponse;
 import api.giybat.uz.dto.ConfirmCodeDTO;
 import api.giybat.uz.dto.profile.ProfileDetailUpdateDTO;
+import api.giybat.uz.dto.profile.ProfilePhotoUpdateDTO;
 import api.giybat.uz.dto.profile.ProfilePswdUpdateDTO;
 import api.giybat.uz.dto.profile.ProfileUsernameUpdateDTO;
 import api.giybat.uz.enums.AppLanguage;
@@ -25,6 +26,12 @@ private ProfileService profileService;
                                                             @RequestHeader(value = "Accept-Language",defaultValue = "RU") AppLanguage language) {
 
         return ResponseEntity.ok().body(profileService.updateDetail(detailUpdateDTO, language));
+    }
+    @PutMapping("/photo")
+    public ResponseEntity<AppResponse<String>> updatePhoto(@Valid @RequestBody ProfilePhotoUpdateDTO photoUpdateDTO ,
+                                                            @RequestHeader(value = "Accept-Language",defaultValue = "RU") AppLanguage language) {
+
+        return ResponseEntity.ok().body(profileService.updatePhoto(photoUpdateDTO, language));
     }
     @PutMapping("/updatePswd")
     public ResponseEntity<AppResponse<String>> updatePassword(@Valid @RequestBody ProfilePswdUpdateDTO updatePswdDTO ,

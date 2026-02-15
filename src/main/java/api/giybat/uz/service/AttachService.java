@@ -92,7 +92,7 @@ public class AttachService {
             String contentType = Files.probeContentType(filePath);
             if (contentType == null) {
                 contentType = "application/octet-stream"; // Fallback content type
-            }
+        }
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(contentType))
                     .body(resource);
@@ -122,7 +122,7 @@ public class AttachService {
 
     public boolean delete(String id) {
         AttachEntity entity = getEntity(id);
-        attachRepository.delete(entity);
+        attachRepository.delete(id);
         File file = new File(getPath(entity));
         boolean b = false;
         if (file.exists()) {

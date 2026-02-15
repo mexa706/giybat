@@ -6,7 +6,7 @@ Accept-Language: RU
 {
   "name" : "Mexa" ,
   "username" : "p.p.maga.zver@gmail.com" ,
-  "password" : "123"
+  "password" : "123qdqd"
 }
 
 ### REGISTRATION
@@ -41,7 +41,7 @@ Content-Type: application/json
 Accept-Language: EN
 
 {
-  "username" : "p.p.maga.zver1@gmail.com" ,
+  "username" : "p.p.maga.zver@gmail.com" ,
   "password" : "123"
 }
 
@@ -127,4 +127,15 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwLnAubWFnYS56dmVyMUBnbWFpb
 
 {
   "code": "70751"
+}
+
+
+### profile update photo
+PUT http://localhost:8081/profile/photo
+Content-Type: application/json
+Accept-Language: RU
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwLnAubWFnYS56dmVyQGdtYWlsLmNvbSIsInJvbGVzIjoiUk9MRV9VU0VSIiwiaWQiOiIzIiwiaWF0IjoxNzcwOTg2MTQxLCJleHAiOjE3NzA5ODk3NDF9.L5beg1VbBdY9fv17Io0MGpVjIfNMBBkxnbBT03jJka5HlHWPUb3iEHQMVPjMYTDxXiJAPEgnhwRz5Bv7T1GGvQ
+
+{
+  "photoId": "c72e8295-e4c1-4250-bb09-4dac606217a5.jpg"
 }

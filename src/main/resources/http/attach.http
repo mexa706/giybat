@@ -1,8 +1,16 @@
 ###Upload Attach
 POST localhost:8081/attach/upload
 Content-Type: multipart/form-data; boundary=WebAppBoundary
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwLnAubWFnYS56dmVyQGdtYWlsLmNvbSIsInJvbGVzIjoiUk9MRV9VU0VSIiwiaWQiOiIzIiwiaWF0IjoxNzcwOTg2MTQxLCJleHAiOjE3NzA5ODk3NDF9.L5beg1VbBdY9fv17Io0MGpVjIfNMBBkxnbBT03jJka5HlHWPUb3iEHQMVPjMYTDxXiJAPEgnhwRz5Bv7T1GGvQ
 
 --WebAppBoundary
-Content-Disposition: form-data; name="file"; filename="pexels-veeterzy-39811.jpg";
+Content-Disposition: form-data; name="file"; filename="photo_5213046822614536067_y.jpg";
 
-<D:\какуля\pexels-veeterzy-39811.jpg
+< D:\какуля\хацкер.jpg
+
+
+
+###Open Attach
+GET localhost:8081/attach/open/0e2b0caf-cc2d-48e4-b586-3ef1c3d57199.jpg
+Content-Type:  application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwLnAubWFnYS56dmVyQGdtYWlsLmNvbSIsInJvbGVzIjoiUk9MRV9VU0VSIiwiaWQiOiIzIiwiaWF0IjoxNzcwOTg2MTQxLCJleHAiOjE3NzA5ODk3NDF9.L5beg1VbBdY9fv17Io0MGpVjIfNMBBkxnbBT03jJka5HlHWPUb3iEHQMVPjMYTDxXiJAPEgnhwRz5Bv7T1GGvQ

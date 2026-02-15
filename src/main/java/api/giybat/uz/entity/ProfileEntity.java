@@ -30,6 +30,15 @@ public class ProfileEntity {
     private GeneralStatus status;
     @Column(name="created_date")
     private LocalDateTime createdDate;
+
+    @Column(name="photo_id")
+    private String photoId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "photo_id",insertable = false, updatable = false)
+    private AttachEntity photo;
+
+
     @Column(name="visible")
     private Boolean visible=Boolean.TRUE;
 

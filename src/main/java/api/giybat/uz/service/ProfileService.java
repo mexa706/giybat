@@ -3,6 +3,7 @@ package api.giybat.uz.service;
 import api.giybat.uz.dto.AppResponse;
 import api.giybat.uz.dto.ConfirmCodeDTO;
 import api.giybat.uz.dto.profile.ProfileDetailUpdateDTO;
+import api.giybat.uz.dto.profile.ProfilePhotoUpdateDTO;
 import api.giybat.uz.dto.profile.ProfilePswdUpdateDTO;
 import api.giybat.uz.dto.profile.ProfileUsernameUpdateDTO;
 import api.giybat.uz.entity.ProfileEntity;
@@ -40,6 +41,8 @@ public class ProfileService {
     private EmailSendingService emailSendingService;
     @Autowired
     private ProfileRoleRepository profileRoleRepository;
+    @Autowired
+    private AttachService attachService;
 
     public ProfileEntity getById(Integer id) {
 
@@ -54,6 +57,15 @@ public class ProfileService {
         return new AppResponse<>(bundleService.getMessage("profile.detail.update.success", language));
     }
 
+    public AppResponse<String> updatePhoto(ProfilePhotoUpdateDTO photoUpdateDTO, AppLanguage language) {
+        Integer profileId = SpringSecurityUtil.getCurrentUserId();
+        ProfileEntity profile = getById(profileId);
+        if (profile.getPhotoId() != null && !profile.getPhotoId().equals(photoUpdateDTO.getPhotoId())) {
+            attachService.delete(profile.getPhotoId());
+        }
+        profileRopoitory.updatePhoto(photoUpdateDTO.getPhotoId(), profileId);
+        return new AppResponse<>(bundleService.getMessage("profile.detail.update.success", language));
+    }
 
     public AppResponse<String> updatePswd(ProfilePswdUpdateDTO updatePswdDTO, AppLanguage language) {
 
@@ -62,7 +74,7 @@ public class ProfileService {
         String encodedPassword = profileRopoitory.findPasswordById(profileId);
 
         if (!bCryptPasswordEncoder.matches(updatePswdDTO.getOldPassword(), encodedPassword)) {
-            throw  new AppBadExceptions(bundleService.getMessage("reset.failed", language));
+            throw new AppBadExceptions(bundleService.getMessage("reset.failed", language));
         }
 
         String newEncodedPassword = bCryptPasswordEncoder.encode(updatePswdDTO.getNewPassword());
@@ -79,7 +91,7 @@ public class ProfileService {
         Optional<ProfileEntity> profile = profileRopoitory.findByUsernameAndVisibleTrue(usernameUpdateDTO.getUsername());
 
         if (profile.isPresent()) {
-            throw  new AppBadExceptions(bundleService.getMessage("email.phone.exists", language));
+            throw new AppBadExceptions(bundleService.getMessage("email.phone.exists", language));
         }
 
         //save
@@ -99,7 +111,7 @@ public class ProfileService {
             String message = bundleService.getMessage("confirm.code.send", language).formatted(usernameUpdateDTO.getUsername());
             return new AppResponse<>(message);
         } else {
-            throw  new AppBadExceptions(bundleService.getMessage("contact.format.invalid", language));
+            throw new AppBadExceptions(bundleService.getMessage("contact.format.invalid", language));
         }
 
     }
@@ -120,6 +132,6 @@ public class ProfileService {
         String jwt = JwtUtil.encode(tempUsername, entity.getId(), roles);
 
 
-        return new AppResponse<>(jwt,bundleService.getMessage("profile.username.update.success", language));
+        return new AppResponse<>(jwt, bundleService.getMessage("profile.username.update.success", language));
     }
 }
