@@ -92,7 +92,7 @@ public class AttachService {
             String contentType = Files.probeContentType(filePath);
             if (contentType == null) {
                 contentType = "application/octet-stream"; // Fallback content type
-        }
+            }
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(contentType))
                     .body(resource);
@@ -130,7 +130,6 @@ public class AttachService {
         }
         return b;
     }
-
 
 
     /**
@@ -173,5 +172,13 @@ public class AttachService {
         attachDTO.setCreatedData(entity.getCreatedDate());
         attachDTO.setUrl(openURL(entity.getId()));
         return attachDTO;
+    }
+
+    public AttachDTO attachDTO(String photoId) {
+        if (photoId == null) return null;
+        AttachDTO dto = new AttachDTO();
+        dto.setId(photoId);
+        dto.setUrl(openURL(photoId));
+        return dto;
     }
 }

@@ -45,6 +45,8 @@ public class AuthService {
     private SmsHistoryService smsHistoryService;
     @Autowired
     private EmailHistoryService emailHistoryService;
+    @Autowired
+    private AttachService attachService;
 
 
     public AppResponse<String> registaration(RegistrationDTO dto, AppLanguage language) {
@@ -170,7 +172,7 @@ public class AuthService {
             emailSendingService.SendResetPasswordEmail(dto.getUsername(), language);
         }
 
-        String response= String.format(bundleService.getMessage("reset.password.response", language), dto.getUsername());
+        String response = String.format(bundleService.getMessage("reset.password.response", language), dto.getUsername());
 
         return new AppResponse<>(response);
     }
@@ -180,9 +182,8 @@ public class AuthService {
         response.setName(profile.getName());
         response.setUsername(profile.getUsername());
         response.setRoleList(profileRoleRepository.getAllRolesListByProfileId(profile.getId()));
-
         response.setJwt(JwtUtil.encode(profile.getUsername(), profile.getId(), response.getRoleList()));
-
+        response.setAttach(attachService.attachDTO(profile.getPhotoId()));
         return response;
     }
 
@@ -203,7 +204,7 @@ public class AuthService {
             emailHistoryService.check(dto.getUsername(), dto.getCode(), language);
         }
 
-        profileRopsitory.updatePassword(profileEntity.getId(),bCryptPasswordEncoder.encode(dto.getPassword()));
+        profileRopsitory.updatePassword(profileEntity.getId(), bCryptPasswordEncoder.encode(dto.getPassword()));
 
         return new AppResponse<>(bundleService.getMessage("reset.password.confirm.success", language));
     }
