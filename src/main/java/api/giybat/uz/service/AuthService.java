@@ -16,6 +16,7 @@ import api.giybat.uz.util.JwtUtil;
 import api.giybat.uz.util.PhoneUtil;
 import io.jsonwebtoken.JwtException;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class AuthService {
     @Autowired
     private ProfileRopsitory profileRopsitory;
@@ -60,6 +62,7 @@ public class AuthService {
                 profileRopsitory.delete(profile);
 
             } else {
+                log.warn("Profile already exists: {}" , dto.getUsername());
                 throw new AppBadExceptions(bundleService.getMessage("email.phone.exists", language));
             }
         }
@@ -98,6 +101,7 @@ public class AuthService {
         } catch (JwtException e) {
             e.printStackTrace();
         }
+        log.warn("Registration email verification failed: {}" , token);
         throw new AppBadExceptions(bundleService.getMessage("verification.failed", language));
     }
 
@@ -105,13 +109,16 @@ public class AuthService {
 
         Optional<ProfileEntity> optional = profileRopsitory.findByUsernameAndVisibleTrue(dto.getUsername());
         if (optional.isEmpty()) {
+            log.warn("Username or password wrong: {}" , dto.getUsername());
             throw new AppBadExceptions(bundleService.getMessage("username.password.wrong", language));
         }
         if (!bCryptPasswordEncoder.matches(dto.getPassword(), optional.get().getPassword())) {
+            log.warn("Username or password wrong: {}" , dto.getUsername());
             throw new AppBadExceptions(bundleService.getMessage("username.password.wrong", language));
 
         }
         if (!optional.get().getStatus().equals(GeneralStatus.ACTIVE)) {
+            log.warn("Wrong status: {}" , dto.getUsername());
             throw new AppBadExceptions(bundleService.getMessage("wrong.status", language));
         }
 
@@ -124,11 +131,13 @@ public class AuthService {
 
         Optional<ProfileEntity> optional = profileRopsitory.findByUsernameAndVisibleTrue(dto.getPhone());
         if (optional.isEmpty()) {
+            log.warn("Profile not found: phone {}" , dto.getPhone());
             throw new AppBadExceptions(bundleService.getMessage("profile.not.found", language));
         }
 
         ProfileEntity profileEntity = optional.get();
         if (!profileEntity.getStatus().equals(GeneralStatus.IN_REGISTRATION)) {
+            log.warn("Verification failed: phone {}" , dto.getPhone());
             throw new AppBadExceptions(bundleService.getMessage("verification.failed", language));
         }
 
@@ -142,11 +151,13 @@ public class AuthService {
     public AppResponse<String> registrationSmsVerificationResend(SmsResendDTO dto, AppLanguage language) {
         Optional<ProfileEntity> optional = profileRopsitory.findByUsernameAndVisibleTrue(dto.getPhone());
         if (optional.isEmpty()) {
+            log.warn("Verification failed: phone {}" , dto.getPhone());
             throw new AppBadExceptions(bundleService.getMessage("profile.not.found", language));
         }
 
         ProfileEntity profileEntity = optional.get();
         if (!profileEntity.getStatus().equals(GeneralStatus.IN_REGISTRATION)) {
+            log.warn("Verification failed: phone {}" , dto.getPhone());
             throw new AppBadExceptions(bundleService.getMessage("verification.failed", language));
         }
 
@@ -159,10 +170,12 @@ public class AuthService {
 
         Optional<ProfileEntity> optional = profileRopsitory.findByUsernameAndVisibleTrue(dto.getUsername());
         if (optional.isEmpty()) {
+            log.warn("Profile not found: username {}" , dto.getUsername());
             throw new AppBadExceptions(bundleService.getMessage("profile.not.found", language));
         }
         ProfileEntity profileEntity = optional.get();
         if (!profileEntity.getStatus().equals(GeneralStatus.ACTIVE)) {
+            log.warn("Wrong status: username {}" , dto.getUsername());
             throw new AppBadExceptions(bundleService.getMessage("reset.failed", language));
         }
 
@@ -191,10 +204,12 @@ public class AuthService {
 
         Optional<ProfileEntity> optional = profileRopsitory.findByUsernameAndVisibleTrue(dto.getUsername());
         if (optional.isEmpty()) {
+            log.warn("Profile not found: username {}" , dto.getUsername());
             throw new AppBadExceptions(bundleService.getMessage("profile.not.found", language));
         }
         ProfileEntity profileEntity = optional.get();
         if (!profileEntity.getStatus().equals(GeneralStatus.ACTIVE)) {
+            log.warn("Wrong status: username {}" , dto.getUsername());
             throw new AppBadExceptions(bundleService.getMessage("reset.failed", language));
         }
 

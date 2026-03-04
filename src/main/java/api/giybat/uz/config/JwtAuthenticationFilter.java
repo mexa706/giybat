@@ -27,11 +27,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-       AntPathMatcher pathMatcher = new AntPathMatcher();
+        AntPathMatcher pathMatcher = new AntPathMatcher();
         return Arrays
                 .stream(SpringConfig.AUTH_WHITELIST)
-                .anyMatch(p->pathMatcher.match(p,request.getServletPath()));
+                .anyMatch(p -> pathMatcher.match(p, request.getServletPath()));
     }
+
+
+
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

@@ -16,6 +16,7 @@ import api.giybat.uz.util.EmailUtil;
 import api.giybat.uz.util.JwtUtil;
 import api.giybat.uz.util.PhoneUtil;
 import api.giybat.uz.util.SpringSecurityUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class ProfileService {
     @Autowired
     private ProfileRopsitory profileRopoitory;
@@ -46,7 +48,11 @@ public class ProfileService {
 
     public ProfileEntity getById(Integer id) {
 
-        return profileRopoitory.findByIdAndVisibleTrue(id).orElseThrow(() -> new AppBadExceptions("Profile not found"));
+        return profileRopoitory.findByIdAndVisibleTrue(id).orElseThrow(() -> {
+            log.error("getById failed: id {} ", id);
+            throw new AppBadExceptions("Profile not found");
+
+        });
 
     }
 
@@ -74,6 +80,7 @@ public class ProfileService {
         String encodedPassword = profileRopoitory.findPasswordById(profileId);
 
         if (!bCryptPasswordEncoder.matches(updatePswdDTO.getOldPassword(), encodedPassword)) {
+            log.warn("Reset password failed ");
             throw new AppBadExceptions(bundleService.getMessage("reset.failed", language));
         }
 
@@ -91,6 +98,7 @@ public class ProfileService {
         Optional<ProfileEntity> profile = profileRopoitory.findByUsernameAndVisibleTrue(usernameUpdateDTO.getUsername());
 
         if (profile.isPresent()) {
+            log.warn("Email or phone exists : username {} ", usernameUpdateDTO.getUsername());
             throw new AppBadExceptions(bundleService.getMessage("email.phone.exists", language));
         }
 
@@ -111,6 +119,7 @@ public class ProfileService {
             String message = bundleService.getMessage("confirm.code.send", language).formatted(usernameUpdateDTO.getUsername());
             return new AppResponse<>(message);
         } else {
+            log.warn("Contact format invalid : username {} ", usernameUpdateDTO.getUsername());
             throw new AppBadExceptions(bundleService.getMessage("contact.format.invalid", language));
         }
 

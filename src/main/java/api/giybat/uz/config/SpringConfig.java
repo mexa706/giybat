@@ -1,5 +1,9 @@
 package api.giybat.uz.config;
 
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +37,12 @@ public class SpringConfig   {
 
     public static final String[] AUTH_WHITELIST = {
             "/auth/**",
-            "/attach/open/**"
+            "/attach/open/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
+
+
     };
 
     @Bean
@@ -48,6 +57,7 @@ public class SpringConfig   {
         authenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
         return authenticationProvider;
     }
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

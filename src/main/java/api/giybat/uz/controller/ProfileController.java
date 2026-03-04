@@ -8,6 +8,7 @@ import api.giybat.uz.dto.profile.ProfilePswdUpdateDTO;
 import api.giybat.uz.dto.profile.ProfileUsernameUpdateDTO;
 import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.service.ProfileService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/profile")
+@Tag(name = "ProfileController",description = "API set for working with Profile")
 public class ProfileController {
 
 @Autowired
