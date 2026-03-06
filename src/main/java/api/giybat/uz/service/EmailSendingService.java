@@ -2,7 +2,7 @@ package api.giybat.uz.service;
 
 import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.enums.EmailType;
-import api.giybat.uz.exps.AppBadExceptions;
+import api.giybat.uz.exps.AppBadException;
 import api.giybat.uz.util.JwtUtil;
 import api.giybat.uz.util.RandomUtil;
 import jakarta.mail.MessagingException;
@@ -72,7 +72,7 @@ public class EmailSendingService {
 
         Long countSms = emailHistoryService.getEmailCount(email);
         if (countSms >= attemptCount) {
-            throw new AppBadExceptions(bundleService.getMessage("email.limit.reached", language));
+            throw new AppBadException(bundleService.getMessage("email.limit.reached", language));
         }
 
         CompletableFuture.runAsync(() -> {

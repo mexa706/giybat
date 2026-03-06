@@ -1,10 +1,58 @@
 ### POST
 POST localhost:8081/post/creat
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwLnAubWFnYS56dmVyQGdtYWlsLmNvbSIsInJvbGVzIjoiUk9MRV9VU0VSIiwiaWQiOiIxIiwiaWF0IjoxNzQzOTMwMTQxLCJleHAiOjE3NDM5MzM3NDF9.nAaqpj8U8D7ouyGNlNNAituG2amqjhSIfyxbJDcc349pl6YK7uK07xK6NRIEGAGbRiIsuXtN4FjVRWVkDyHNOA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZXhhc2F5QGdtYWlsLmNvbSIsInJvbGVzIjoiUk9MRV9VU0VSIiwiaWQiOiIzIiwiaWF0IjoxNzcyNjU5NTkxLCJleHAiOjE3NzI2NjMxOTF9.r4GOL7TbfychKa41QTwf710eGLqm9wlsKmu6MmtdqAcoATsYNwMVIbZV4BNeD0HPKD2q5ki0fkue-dvQkruuog
 
 {
-  "name" : "Mexa" ,
-  "username" : "p.p.maga.zver@gmail.com" ,
-  "password" : "1221"
+  "title": "Mexa123123",
+  "content": "34567890p;lhgdfp.p.maga.zver@gmail.comsdvsdddddddddd",
+  "photo": {
+    "id" : "a7bbcf37-cc4b-444e-be1f-0f19ca5520d2.jpg"
+  }
+}
+
+### GET
+GET localhost:8081/post/profile
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZXhhc2F5QGdtYWlsLmNvbSIsInJvbGVzIjoiUk9MRV9VU0VSIiwiaWQiOiIzIiwiaWF0IjoxNzcyNjUzODg3LCJleHAiOjE3NzI2NTc0ODd9.DxOZmtxbTAvcK9XsrGBjfhT7rdjwyk9CRj3PbyCqGA_zvgY9ZsOLEF8__6tZJDAOYJoBnwKc6UW9MGp0Hz9yzA
+
+
+### GET
+GET localhost:8081/post/public/e3a81cfa-f9bf-44ea-9c49-c3dbffd8be6f
+Content-Type: application/json
+
+###PUT
+PUT localhost:8081/post/e3a81cfa-f9bf-44ea-9c49-c3dbffd8be6f
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZXhhc2F5QGdtYWlsLmNvbSIsInJvbGVzIjoiUk9MRV9VU0VSIiwiaWQiOiIzIiwiaWF0IjoxNzcyNjU5NTkxLCJleHAiOjE3NzI2NjMxOTF9.r4GOL7TbfychKa41QTwf710eGLqm9wlsKmu6MmtdqAcoATsYNwMVIbZV4BNeD0HPKD2q5ki0fkue-dvQkruuog
+
+{
+  "title" : "chukaka",
+  "content" : "mexa",
+  "photo": {
+    "id" : "5e3875f1-a90c-46a1-953e-97c3cf751d2a.jpg"
+  }
+
+}
+
+
+### Delete post
+DELETE localhost:8081/post/227ed7bc-6439-4958-ab4d-8dac4fcddbb5
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZXhhc2F5QGdtYWlsLmNvbSIsInJvbGVzIjoiUk9MRV9VU0VSIiwiaWQiOiIzIiwiaWF0IjoxNzcyNjU5NTkxLCJleHAiOjE3NzI2NjMxOTF9.r4GOL7TbfychKa41QTwf710eGLqm9wlsKmu6MmtdqAcoATsYNwMVIbZV4BNeD0HPKD2q5ki0fkue-dvQkruuog
+
+### POST
+POST localhost:8081/post/public/filter?page=2&size=2
+Content-Type: application/json
+
+{
+  "query": ""
+}
+
+### POST similar
+POST localhost:8081/post/public/similar
+Content-Type: application/json
+
+{
+  "exeptId" : "e76c3585-8ba5-4982-83e0-9f6201a734a3"
 }

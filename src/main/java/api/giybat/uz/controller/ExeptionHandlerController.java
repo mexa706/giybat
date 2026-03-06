@@ -1,7 +1,7 @@
 package api.giybat.uz.controller;
 
 
-import api.giybat.uz.exps.AppBadExceptions;
+import api.giybat.uz.exps.AppBadException;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -44,8 +44,8 @@ public class ExeptionHandlerController extends ResponseEntityExceptionHandler {
 
 
 
-    @ExceptionHandler(AppBadExceptions.class)
-    ResponseEntity<String> handle (AppBadExceptions e){
+    @ExceptionHandler(AppBadException.class)
+    ResponseEntity<String> handle (AppBadException e){
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 

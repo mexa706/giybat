@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AttachDTO {
-
     private String id;
     private String originName;
     private Long size;

@@ -3,7 +3,7 @@ package api.giybat.uz.service;
 import api.giybat.uz.entity.EmailHistoryEntity;
 import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.enums.EmailType;
-import api.giybat.uz.exps.AppBadExceptions;
+import api.giybat.uz.exps.AppBadException;
 
 import api.giybat.uz.repository.EmailHistoryRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -50,25 +50,25 @@ public class EmailHistoryService {
         Optional<EmailHistoryEntity> optional = emailHistoryRepository.findTop1ByEmailOrderByCreatedDateDesc(email);
         if (optional.isEmpty()) {
             log.warn("Verification failed: email {}, code {} " , email, code);
-            throw new AppBadExceptions(bundleService.getMessage("verification.failed", language));
+            throw new AppBadException(bundleService.getMessage("verification.failed", language));
         }
         EmailHistoryEntity entity = optional.get();
 
         if (entity.getAttemptCount()>=attemptCount) {
             log.warn("Code limit failed:  email {}, code {} " , email, code);
-            throw new AppBadExceptions(bundleService.getMessage("code.limit.failed", language));
+            throw new AppBadException(bundleService.getMessage("code.limit.failed", language));
         }
 
         if (!code.equals(entity.getCode())) {
            emailHistoryRepository.updateAttemptCount(entity.getId());
             log.warn("Verification code invalid: email {}, code {} " , email, code);
-            throw new AppBadExceptions(bundleService.getMessage("verification.code.invalid", language));
+            throw new AppBadException(bundleService.getMessage("verification.code.invalid", language));
         }
 
         LocalDateTime expDate = entity.getCreatedDate().plusMinutes(timeLimit);
         if (LocalDateTime.now().isAfter(expDate)) {
             log.warn("Verification code date invalid: email {}, code {} " , email, code);
-            throw new AppBadExceptions(bundleService.getMessage("verification.code.date.invalid", language));
+            throw new AppBadException(bundleService.getMessage("verification.code.date.invalid", language));
         }
     }
 

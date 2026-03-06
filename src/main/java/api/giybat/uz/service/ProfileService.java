@@ -9,7 +9,7 @@ import api.giybat.uz.dto.profile.ProfileUsernameUpdateDTO;
 import api.giybat.uz.entity.ProfileEntity;
 import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.enums.ProfileRole;
-import api.giybat.uz.exps.AppBadExceptions;
+import api.giybat.uz.exps.AppBadException;
 import api.giybat.uz.repository.ProfileRoleRepository;
 import api.giybat.uz.repository.ProfileRopsitory;
 import api.giybat.uz.util.EmailUtil;
@@ -50,7 +50,7 @@ public class ProfileService {
 
         return profileRopoitory.findByIdAndVisibleTrue(id).orElseThrow(() -> {
             log.error("getById failed: id {} ", id);
-            throw new AppBadExceptions("Profile not found");
+            throw new AppBadException("Profile not found");
 
         });
 
@@ -81,7 +81,7 @@ public class ProfileService {
 
         if (!bCryptPasswordEncoder.matches(updatePswdDTO.getOldPassword(), encodedPassword)) {
             log.warn("Reset password failed ");
-            throw new AppBadExceptions(bundleService.getMessage("reset.failed", language));
+            throw new AppBadException(bundleService.getMessage("reset.failed", language));
         }
 
         String newEncodedPassword = bCryptPasswordEncoder.encode(updatePswdDTO.getNewPassword());
@@ -99,7 +99,7 @@ public class ProfileService {
 
         if (profile.isPresent()) {
             log.warn("Email or phone exists : username {} ", usernameUpdateDTO.getUsername());
-            throw new AppBadExceptions(bundleService.getMessage("email.phone.exists", language));
+            throw new AppBadException(bundleService.getMessage("email.phone.exists", language));
         }
 
         //save
@@ -120,7 +120,7 @@ public class ProfileService {
             return new AppResponse<>(message);
         } else {
             log.warn("Contact format invalid : username {} ", usernameUpdateDTO.getUsername());
-            throw new AppBadExceptions(bundleService.getMessage("contact.format.invalid", language));
+            throw new AppBadException(bundleService.getMessage("contact.format.invalid", language));
         }
 
     }

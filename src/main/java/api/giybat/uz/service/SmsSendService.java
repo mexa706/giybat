@@ -6,7 +6,7 @@ import api.giybat.uz.dto.sms.SmsSendResponseDTO;
 import api.giybat.uz.entity.SmsProviderTokenHolder;
 import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.enums.SmsType;
-import api.giybat.uz.exps.AppBadExceptions;
+import api.giybat.uz.exps.AppBadException;
 import api.giybat.uz.repository.SmsProviderTokenRepository;
 import api.giybat.uz.util.RandomUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -72,7 +72,7 @@ public class SmsSendService {
         Long countSms = smsHistoryService.getSmsCount(phoneNumber);
         if (countSms >= attemptCount) {
             log.warn("Sms limit reached: phone {}" , phoneNumber);
-            throw new AppBadExceptions(bundleService.getMessage("sms.limit.reached", language));
+            throw new AppBadException(bundleService.getMessage("sms.limit.reached", language));
         }
 
         SmsSendResponseDTO result = sendSms(phoneNumber, message);

@@ -3,16 +3,12 @@ package api.giybat.uz.service;
 
 import api.giybat.uz.dto.attach.AttachDTO;
 import api.giybat.uz.entity.AttachEntity;
-import api.giybat.uz.exps.AppBadExceptions;
+import api.giybat.uz.exps.AppBadException;
 import api.giybat.uz.repository.AttachRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -44,7 +40,7 @@ public class AttachService {
 
     public AttachDTO upload(MultipartFile file) {
         if (file.isEmpty()) {
-            throw new AppBadExceptions("File not found");
+            throw new AppBadException("File not found");
         }
 
         try {
@@ -150,7 +146,7 @@ public class AttachService {
     public AttachEntity getEntity(String id) {
         Optional<AttachEntity> optional = attachRepository.findById(id);
         if (optional.isEmpty()) {
-            throw new AppBadExceptions("File not found");
+            throw new AppBadException("File not found");
         }
         return optional.get();
     }
