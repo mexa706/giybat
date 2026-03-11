@@ -3,7 +3,7 @@ values (
            1,
            'admin',
            'admin@gmail.com',
-           '$2a$10$mLdxH4XTasEoV3GRxvBEOOXwAavJHlR0qpD7Azz6NUXCNKwUuwRR',
+           '$2a$10$TZ0.jUnR1FP68Mt4eSqNveBFX9zDO7rtdYJA7pWr8sp75OYjxkY0K',
            'ACTIVE',
            true,
            now()

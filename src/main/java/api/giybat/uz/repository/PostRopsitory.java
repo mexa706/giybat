@@ -42,4 +42,9 @@ public interface PostRopsitory extends CrudRepository<PostEntity, String> , Pagi
 
     @Query("select p from PostEntity p where p.id != ?1 and p.visible = true order by p.createdDate desc limit 3")
     List<PostEntity> getSimilarPostList(String exceptId);
+
+
+    @Query("SELECT COUNT(p) FROM PostEntity p WHERE p.profile.id = ?1")
+    Integer getPostCountByProfileId(Integer profileId);
+
 }

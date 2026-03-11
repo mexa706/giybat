@@ -1,0 +1,9 @@
+### GET ALL for Admin
+POST localhost:8081/profile/filter
+Content-Type: application/json
+Accept-Language: RU
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlcyI6IlJPTEVfVVNFUixST0xFX0FETUlOIiwiaWQiOiIxIiwiaWF0IjoxNzczMDY2NDE3LCJleHAiOjE3NzMwNzAwMTd9.V8MvRbCV912p1GhaiVOKaeVb5S74yP_vbKv6wIgiPgzl1ykI3rvF1IJT3lUlWRDwvJFKxCQy9_oii04vdGlMHA
+
+{
+  "query" : "ad"
+}

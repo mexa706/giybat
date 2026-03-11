@@ -7,6 +7,7 @@ import lombok.Setter;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Table(name = "profile")
 @Entity
@@ -41,5 +42,10 @@ public class ProfileEntity {
 
     @Column(name="visible")
     private Boolean visible=Boolean.TRUE;
+
+
+    @OneToMany(mappedBy = "profile", fetch = FetchType.LAZY)
+    private List<ProfileRoleEntity> roleList;
+
 
 }

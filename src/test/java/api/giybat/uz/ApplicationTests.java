@@ -19,7 +19,6 @@ class ApplicationTests {
 
     @Test
     void contextLoads() {
-        System.out.println(UUID.randomUUID().toString());
         System.out.println(bCryptPasswordEncoder.encode("706"));
     }
 

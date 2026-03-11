@@ -1,14 +1,14 @@
 package api.giybat.uz.service;
 
 import api.giybat.uz.dto.FilterResultDTO;
-import api.giybat.uz.dto.post.PostCreateDTO;
-import api.giybat.uz.dto.post.PostDTO;
-import api.giybat.uz.dto.post.PostFilterDTO;
-import api.giybat.uz.dto.post.SimilarPostListDTO;
+import api.giybat.uz.dto.post.*;
+import api.giybat.uz.dto.profile.ProfileDTO;
 import api.giybat.uz.entity.PostEntity;
+import api.giybat.uz.enums.AppLanguage;
 import api.giybat.uz.enums.ProfileRole;
 import api.giybat.uz.exps.AppBadException;
-import api.giybat.uz.repository.CustomRepository;
+import api.giybat.uz.mapper.PostDetailMapper;
+import api.giybat.uz.repository.CustomPostRepository;
 import api.giybat.uz.repository.PostRopsitory;
 import api.giybat.uz.util.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 
-import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,7 +29,7 @@ public class PostService {
     @Autowired
     private AttachService attachService;
     @Autowired
-    private CustomRepository customRepository;
+    private CustomPostRepository customRepository;
 
     public PostDTO createPost(PostCreateDTO postDTO) {
 
@@ -108,25 +107,6 @@ public class PostService {
     }
 
 
-    public PostDTO toDTO(PostEntity postEntity) {
-        PostDTO dto = new PostDTO();
-        dto.setId(postEntity.getId());
-        dto.setTitle(postEntity.getTitle());
-        dto.setContent(postEntity.getContent());
-        dto.setCreatedDate(postEntity.getCreatedDate());
-        dto.setPhoto(attachService.attachDTO(postEntity.getPhotoId()));
-        return dto;
-    }
-
-    public PostDTO toInfoDTO(PostEntity postEntity) {
-        PostDTO dto = new PostDTO();
-        dto.setId(postEntity.getId());
-        dto.setTitle(postEntity.getTitle());
-        dto.setCreatedDate(postEntity.getCreatedDate());
-        dto.setPhoto(attachService.attachDTO(postEntity.getPhotoId()));
-        return dto;
-    }
-
     public PostEntity get(String postId) {
         return postRepository.findByIdAndVisibleTrue(postId).orElseThrow(() ->
                 new AppBadException("Post id not found  id : " + postId)
@@ -139,5 +119,53 @@ public class PostService {
         List<PostEntity> posts = postRepository.getSimilarPostList(dto.getExceptId());
         return posts.stream().map(this::toDTO).toList();
 
+    }
+
+    public Page<PostDTO> adminFilter(PostAdminFilterDTO dto, AppLanguage language, Integer page, Integer size) {
+        FilterResultDTO<Object[]> resultDTO = customRepository.filter(dto, page, size);
+
+        List<PostDTO> postDTOList = resultDTO.getList().stream()
+                .map(this::toDTO).toList();
+
+
+        return new PageImpl<>(postDTOList, PageRequest.of(page, size), resultDTO.getTotalCount());
+    }
+
+    public PostDTO toDTO(PostEntity postEntity) {
+        PostDTO dto = new PostDTO();
+        dto.setId(postEntity.getId());
+        dto.setTitle(postEntity.getTitle());
+        dto.setContent(postEntity.getContent());
+        dto.setCreatedDate(postEntity.getCreatedDate());
+        dto.setPhoto(attachService.attachDTO(postEntity.getPhotoId()));
+        return dto;
+    }
+
+    public PostDTO toDTO(Object[] obj) {
+        PostDTO post = new PostDTO();
+        post.setId((String)obj[0]);
+        post.setTitle((String)obj[2]);
+        post.setCreatedDate((LocalDateTime) obj[3]);
+        if (obj[1]!=null) {
+            post.setPhoto(attachService.attachDTO((String)obj[1]));
+        }
+
+
+        ProfileDTO profile = new ProfileDTO();
+        profile.setId((Integer)obj[4]);
+        profile.setName((String)obj[5]);
+        profile.setUsername((String)obj[6]);
+
+        post.setProfile(profile);
+        return post ;
+    }
+
+    public PostDTO toInfoDTO(PostEntity postEntity) {
+        PostDTO dto = new PostDTO();
+        dto.setId(postEntity.getId());
+        dto.setTitle(postEntity.getTitle());
+        dto.setCreatedDate(postEntity.getCreatedDate());
+        dto.setPhoto(attachService.attachDTO(postEntity.getPhotoId()));
+        return dto;
     }
 }

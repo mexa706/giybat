@@ -18,4 +18,6 @@ public interface ProfileRoleRepository extends CrudRepository<ProfileRoleEntity,
     @Query("select p.roles From ProfileRoleEntity p where p.profileId=?1 ")
     List<ProfileRole> getAllRolesListByProfileId(Integer profileId);
 
+
+
 }

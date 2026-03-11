@@ -5,7 +5,7 @@ Accept-Language: RU
 
 {
   "name" : "Mexa" ,
-  "username" : "p.p.maga.zver@gmail.com" ,
+  "username" : "p.p.maga.zve9999999999r@gmail.com" ,
   "password" : "123"
 }
 
@@ -41,8 +41,8 @@ Content-Type: application/json
 Accept-Language: EN
 
 {
-  "username" : "mexasay@gmail.com" ,
-  "password" : "123qdqd"
+  "username" : "admin@gmail.com" ,
+  "password" : "123"
 }
 
 ### Sms resend

@@ -2,14 +2,15 @@ package api.giybat.uz.service;
 
 import api.giybat.uz.dto.AppResponse;
 import api.giybat.uz.dto.ConfirmCodeDTO;
-import api.giybat.uz.dto.profile.ProfileDetailUpdateDTO;
-import api.giybat.uz.dto.profile.ProfilePhotoUpdateDTO;
-import api.giybat.uz.dto.profile.ProfilePswdUpdateDTO;
-import api.giybat.uz.dto.profile.ProfileUsernameUpdateDTO;
+import api.giybat.uz.dto.profile.*;
 import api.giybat.uz.entity.ProfileEntity;
+import api.giybat.uz.entity.ProfileRoleEntity;
 import api.giybat.uz.enums.AppLanguage;
+import api.giybat.uz.enums.GeneralStatus;
 import api.giybat.uz.enums.ProfileRole;
 import api.giybat.uz.exps.AppBadException;
+import api.giybat.uz.mapper.ProfileDetailMapper;
+import api.giybat.uz.repository.PostRopsitory;
 import api.giybat.uz.repository.ProfileRoleRepository;
 import api.giybat.uz.repository.ProfileRopsitory;
 import api.giybat.uz.util.EmailUtil;
@@ -18,9 +19,11 @@ import api.giybat.uz.util.PhoneUtil;
 import api.giybat.uz.util.SpringSecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +48,8 @@ public class ProfileService {
     private ProfileRoleRepository profileRoleRepository;
     @Autowired
     private AttachService attachService;
+    @Autowired
+    private PostRopsitory postRopsitory;
 
     public ProfileEntity getById(Integer id) {
 
@@ -143,4 +148,74 @@ public class ProfileService {
 
         return new AppResponse<>(jwt, bundleService.getMessage("profile.username.update.success", language));
     }
+
+
+    public Page<ProfileFilterResponseDTO> filter(ProfileFilterDTO dto, AppLanguage language, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<ProfileDetailMapper> resultList = null;
+        if (dto == null || dto.getQuery() == null) {
+            resultList = profileRopoitory.filter(pageRequest);
+        } else {
+             resultList = profileRopoitory.filter(dto.getQuery(), pageRequest);
+        }
+
+        List<ProfileFilterResponseDTO> List = resultList.stream().map(entity -> toDTO(entity)).toList();
+        return new PageImpl<>(List, PageRequest.of(page, size), resultList.getTotalElements());
+    }
+
+    public AppResponse<String> status(Integer id, GeneralStatus status, AppLanguage language) {
+        if (status.equals(GeneralStatus.BLOCK)) {
+            profileRopoitory.changeStatus(id, GeneralStatus.ACTIVE);
+        } else if (status.equals(GeneralStatus.ACTIVE)) {
+            profileRopoitory.changeStatus(id, GeneralStatus.BLOCK);
+        } else {
+            throw new AppBadException(bundleService.getMessage("wrong.status", language));
+        }
+        return new AppResponse<>(bundleService.getMessage("profile.status.update.success", language));
+    }
+
+    public AppResponse<String> delete(Integer id, AppLanguage language) {
+        if (getById(id) != null) {
+            profileRopoitory.delete(id);
+        }
+        return new AppResponse<>(bundleService.getMessage("profile.status.update.success", language));
+    }
+
+    /*private ProfileFilterResponseDTO toDTO(ProfileEntity profileEntity) {
+        ProfileFilterResponseDTO dto = new ProfileFilterResponseDTO();
+        dto.setId(profileEntity.getId());
+        dto.setUsername(profileEntity.getUsername());
+        dto.setName(profileEntity.getName());
+        if (profileEntity.getPhotoId() != null) {
+            dto.setPhoto(attachService.attachDTO(profileEntity.getPhotoId()));
+        }
+        if (profileEntity.getRoleList() != null) {
+            List<ProfileRoleEntity> roles = profileEntity.getRoleList();
+            dto.setRoles(roles.stream().map(ProfileRoleEntity::getRoles).toList());
+        }
+        dto.setCreatedDate(profileEntity.getCreatedDate());
+        dto.setStatus(profileEntity.getStatus());
+        dto.setPostCount(postRopsitory.getPostCountByProfileId(profileEntity.getId()));
+        return dto;
+    }*/
+
+    private ProfileFilterResponseDTO toDTO(ProfileDetailMapper detailMapper) {
+        ProfileFilterResponseDTO dto = new ProfileFilterResponseDTO();
+        dto.setId(detailMapper.getId());
+        dto.setUsername(detailMapper.getUsername());
+        dto.setName(detailMapper.getName());
+        if (detailMapper.getPhotoId() != null) {
+            dto.setPhoto(attachService.attachDTO(detailMapper.getPhotoId()));
+        }
+        if(detailMapper.getRoles()!=null) {
+           List<ProfileRole> list= Arrays.stream(detailMapper.getRoles().split(","))
+                    .map(ProfileRole::valueOf).toList();
+        dto.setRoles(list);
+        }
+        dto.setCreatedDate(detailMapper.getCreatedDate());
+        dto.setStatus(detailMapper.getStatus());
+        dto.setPostCount(postRopsitory.getPostCountByProfileId(detailMapper.getId()));
+        return dto;
+    }
+
 }
